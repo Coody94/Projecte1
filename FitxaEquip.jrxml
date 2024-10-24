@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.6.final using JasperReports Library version 6.20.6-5c96b6aa8a39ac1dc6b6bea4b81168e16dd39231  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="FitxaEquip" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fe41d05f-88ab-413d-8f38-32de7f81dcb2">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="OracleEquips"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="ireport.jasperserver.url" value="http://localhost:8080/jasperserver/"/>
+	<property name="ireport.jasperserver.user" value="jasperadmin"/>
+	<property name="ireport.jasperserver.report.resource" value="/Projecte/FitxaEquip_files/main_jrxml"/>
+	<property name="ireport.jasperserver.reportUnit" value="/Projecte/FitxaEquip"/>
+	<parameter name="codi_categoria" class="java.lang.Integer"/>
+	<parameter name="temporada" class="java.lang.Integer"/>
+	<parameter name="codi_equip" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[select e.id,e.nom as nom_equip, e.tipus, e.temporada, cat.nom as nom_cat,
+j.nom as nom_jugador, j.cognom, j.adreca, j.sexe, j.data_naix, j.iban, j.foto
+from equip e left join membre_equip me 
+on e.id=me.id_equip 
+left JOIN jugador j 
+on me.id_jugador=j.id
+left join categoria cat
+on cat.id = e.categoria
+where (e.categoria =  $P{codi_categoria}  or $P{codi_categoria} is null)
+and (e.temporada = $P{temporada} or $P{temporada} is null)
+and (e.id =  $P{codi_equip} or  $P{codi_equip} is null)
+order by e.nom,e.id , j.cognom ,j.nom, j.id]]>
+	</queryString>
+	<field name="ID" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="ID"/>
+		<property name="com.jaspersoft.studio.field.label" value="ID"/>
+	</field>
+	<field name="NOM_EQUIP" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="NOM_EQUIP"/>
+		<property name="com.jaspersoft.studio.field.label" value="NOM_EQUIP"/>
+	</field>
+	<field name="TIPUS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="TIPUS"/>
+		<property name="com.jaspersoft.studio.field.label" value="TIPUS"/>
+	</field>
+	<field name="TEMPORADA" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="TEMPORADA"/>
+		<property name="com.jaspersoft.studio.field.label" value="TEMPORADA"/>
+	</field>
+	<field name="NOM_CAT" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="NOM_CAT"/>
+		<property name="com.jaspersoft.studio.field.label" value="NOM_CAT"/>
+	</field>
+	<field name="NOM_JUGADOR" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="NOM_JUGADOR"/>
+		<property name="com.jaspersoft.studio.field.label" value="NOM_JUGADOR"/>
+	</field>
+	<field name="COGNOM" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="COGNOM"/>
+		<property name="com.jaspersoft.studio.field.label" value="COGNOM"/>
+	</field>
+	<field name="ADRECA" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ADRECA"/>
+		<property name="com.jaspersoft.studio.field.label" value="ADRECA"/>
+	</field>
+	<field name="SEXE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="SEXE"/>
+		<property name="com.jaspersoft.studio.field.label" value="SEXE"/>
+	</field>
+	<field name="DATA_NAIX" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="DATA_NAIX"/>
+		<property name="com.jaspersoft.studio.field.label" value="DATA_NAIX"/>
+	</field>
+	<field name="IBAN" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="IBAN"/>
+		<property name="com.jaspersoft.studio.field.label" value="IBAN"/>
+	</field>
+	<field name="FOTO" class="java.io.InputStream">
+		<property name="com.jaspersoft.studio.field.name" value="FOTO"/>
+		<property name="com.jaspersoft.studio.field.label" value="FOTO"/>
+	</field>
+	<group name="Club" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{ID}]]></groupExpression>
+		<groupHeader>
+			<band height="76">
+				<textField isBlankWhenNull="true">
+					<reportElement x="80" y="10" width="100" height="15" uuid="f120ab4d-fc9c-46d7-b93f-7201d797dd6c">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<textFieldExpression><![CDATA[$F{NOM_EQUIP}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="80" y="31" width="100" height="15" uuid="270db6f3-4ecd-4c88-a315-4778f9245406">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<textFieldExpression><![CDATA[$F{TIPUS}.equals("H") ? "Masculi" : ($F{TIPUS}.equals("D") ? "Femeni" :($F{TIPUS}.equals("M") ? "Mixte" : ""))]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="280" y="10" width="100" height="15" uuid="4df579d9-5521-45a0-8083-95ad33d4fa5a">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<textFieldExpression><![CDATA[$F{TEMPORADA}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="280" y="31" width="140" height="15" uuid="f25bd846-6329-4dd2-b3c8-b8ec0306f836">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<textFieldExpression><![CDATA[$F{NOM_CAT}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="80" y="60" width="100" height="15" uuid="afd95c59-3a9b-4ce8-b40d-66ca7a064b7b">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Jugadors]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="75" width="555" height="1" uuid="95d8ec83-1a6d-44fc-86d1-f145a3730630">
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					</reportElement>
+				</line>
+				<staticText>
+					<reportElement x="20" y="10" width="60" height="15" uuid="78e2cd78-eb13-4acb-85bc-174dfa6607f0">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Equip:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="20" y="33" width="60" height="15" uuid="d9708714-d644-45e1-9be3-7b1dfa5d1337">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Tipus:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="210" y="32" width="70" height="15" uuid="79d5f6dd-ea13-4dea-858f-3292c94cbece">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Categoria:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="210" y="10" width="70" height="15" uuid="d4393b4f-a8fe-422e-9cae-777570f21302">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Temporada:]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="70" splitType="Stretch">
+			<staticText>
+				<reportElement x="210" y="0" width="344" height="70" uuid="29dcfe1e-bedf-4ce7-9863-7c7e60dc2ea2"/>
+				<textElement textAlignment="Center">
+					<font size="53" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ficha equip]]></text>
+			</staticText>
+			<image>
+				<reportElement x="0" y="0" width="100" height="70" uuid="cdc72eee-cd45-411a-ab5c-9b6ade10a599"/>
+				<imageExpression><![CDATA["C:/Users/isard/Desktop/logo.PNG"]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="45" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="60" y="0" width="150" height="15" uuid="b23dc328-a9e7-4ef4-8f83-0e10d0dbab85">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ccd6ab25-069b-4819-9a8f-ae1602854355"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{COGNOM}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="367" y="0" width="123" height="15" uuid="e54db704-1226-4bb1-9c51-e50e73f71b53">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="72077ac6-715b-4714-af52-bee72379dcac"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{ADRECA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="270" y="15" width="79" height="15" uuid="7e9e4934-07da-4636-b034-edef249c0cff">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f38b080d-7461-42de-81c8-60027d4557f6"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{SEXE}.equals("H") ? "Home" : ($F{SEXE}.equals("D") ? "Dona" : "")]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy " isBlankWhenNull="true">
+				<reportElement x="110" y="14" width="100" height="15" uuid="3e50e8cc-7fa7-4321-874c-fa90415f1943">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="84cbda10-edda-4583-8399-511e6261fc15"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{DATA_NAIX}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="60" y="30" width="430" height="15" uuid="e5bede65-258a-420e-be32-c9c69c7e162b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a4b8218d-9852-4423-910a-16d07b668ea5"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{IBAN}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="60" height="15" uuid="eff55df5-d427-4cac-bb55-ef53958f086d">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cognoms:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="210" y="0" width="30" height="15" uuid="bbfea7f1-9357-40e7-b25a-cd3b224839c3">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nom:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="317" y="-1" width="50" height="15" uuid="d42d2cf9-5414-43a5-af3c-0aca7e4683da">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Adreça:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="15" width="90" height="15" uuid="0cdb0aa3-f914-4795-92e3-5dd27459a740">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data naixement:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="210" y="15" width="60" height="15" uuid="31df810c-197d-476d-a0e6-dc54083708b7">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sexe:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="30" width="60" height="15" uuid="49a65dd2-66d8-4933-87e7-d57705f84844">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[IBAN:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="44" width="555" height="1" uuid="9809f749-6e5f-4c7b-81bd-6361dc730486">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+			</line>
+			<textField>
+				<reportElement x="250" y="-1" width="66" height="15" uuid="2d16cee2-84a3-4d37-868d-c9c5940adda9">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{NOM_JUGADOR}]]></textFieldExpression>
+			</textField>
+			<image hAlign="Center">
+				<reportElement x="490" y="0" width="64" height="43" uuid="4f85505d-105e-4f21-9c80-f15666cc380b"/>
+				<imageExpression><![CDATA[$F{FOTO}]]></imageExpression>
+			</image>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="50" splitType="Stretch">
+			<textField>
+				<reportElement x="355" y="20" width="100" height="30" uuid="a6dbf573-98f1-4578-a891-5c2a6781e0c8"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Pagina " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="455" y="20" width="100" height="30" uuid="5d9cb36d-95a7-43a0-837c-5bba66819a0e"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[" de " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy h:mm a">
+				<reportElement x="0" y="20" width="140" height="30" uuid="d66d7c27-eaf4-4cfb-92e7-ab90e91a9bf7"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

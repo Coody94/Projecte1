@@ -29,8 +29,8 @@ CREATE TABLE jugador(
     sexe VARCHAR(1) NOT NULL,
     data_naix date NOT NULL,
     id_legal VARCHAR(10) NOT NULL,
-    iban VARCHAR(10) NOT NULL,
-    any_fi_reviso_medica date NOT NULL,
+    iban VARCHAR(40) NOT NULL,
+    any_fi_reviso_medica number(4,0) NOT NULL,
     adreca VARCHAR(50) NOT NULL,
     foto BLOB,
     
@@ -121,23 +121,24 @@ DECLARE
     v_temporada equip.temporada%TYPE;
     v_titular_existent NUMBER;
 BEGIN
+    IF :NEW.titular_convidat = 'T' THEN
+        SELECT temporada INTO v_temporada
+        FROM equip
+        WHERE id = :NEW.id_equip;
 
-    SELECT temporada INTO v_temporada
-    FROM equip
-    WHERE id = :NEW.id_equip;
+        
+        SELECT COUNT(*)
+        INTO v_titular_existent
+        FROM membre_equip me
+        JOIN equip e ON me.id_equip = e.id
+        WHERE me.id_jugador = :NEW.id_jugador
+        AND me.titular_convidat = 'T'  
+        AND e.temporada = v_temporada;
 
-    
-    SELECT COUNT(*)
-    INTO v_titular_existent
-    FROM membre_equip me
-    JOIN equip e ON me.id_equip = e.id
-    WHERE me.id_jugador = :NEW.id_jugador
-      AND me.titular_convidat = 'T'  
-      AND e.temporada = v_temporada;
-
-    
-    IF v_titular_existent > 0 THEN
-        RAISE_APPLICATION_ERROR(-20004, 'El jugador ya es titular per un altre equip en aquesta temporada');
+        
+        IF v_titular_existent > 0 THEN
+            RAISE_APPLICATION_ERROR(-20004, 'El jugador ya es titular per un altre equip en aquesta temporada');
+        END IF;
     END IF;
 END;
 /

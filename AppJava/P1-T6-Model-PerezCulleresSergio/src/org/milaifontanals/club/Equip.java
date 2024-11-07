@@ -39,30 +39,45 @@ public class Equip {
     
     
     
-    public void promoveToTitular(Jugador j){
+    public void promoveToTitular(Jugador j) throws ClubException{
         
+        if(titulars.contains(j)){
+            throw new ClubException("El jugador ya es titular");
+
+        }
+        
+        if(convidats.contains(j)){
+            convidats.remove(j);
+            titulars.add(j);
+        }else{
+            throw new ClubException("El jugador no esta en el equip");
+        }
     }
     
-    public void removeTitular(Jugador j){
+    public void removeTitular(Jugador j) throws ClubException{
+        if(convidats.contains(j)){
+            throw new ClubException("El jugador ya es convidat");
+
+        }
         
+        if(titulars.contains(j)){
+            titulars.remove(j);
+            convidats.add(j);
+        }else{
+            throw new ClubException("El jugador no esta en el equip");
+        }
     }
     
-    public void addJugadors(Jugador j,boolean titular){
+    public void addJugadors(Jugador j,boolean titular) throws ClubException{
+        
+        if(titulars.contains(j)|| convidats.contains(j)){
+            throw new ClubException("El jugador ya esta en el equip");
+        }
         
         if(titular){
-            if(titulars.contains(j)){
-                //TODO
-                //error
-            }else{
-                titulars.add(j);
-            }
+             titulars.add(j);
         }else{
-            if(convidats.contains(j)){
-                //TODO
-                //error
-            }else{
-                convidats.add(j);
-            }
+            convidats.add(j);
         }
         
         

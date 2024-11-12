@@ -20,6 +20,10 @@ class Temporada {
         setAny_t(any_t);
         setEquips(equips);
     }
+    public Temporada(int any_t) {
+        setAny_t(any_t);
+        setEquips(null);
+    }
 
     public Temporada() {
         setEquips(null);

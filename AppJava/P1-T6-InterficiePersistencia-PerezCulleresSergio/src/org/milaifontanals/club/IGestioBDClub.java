@@ -28,7 +28,7 @@ public interface IGestioBDClub {
      * @return Llista de les ids dels jugadors
      * @throws GestorBDClubException
      */
-    List<Integer> getJugadorsEquip() throws GestorBDClubException;
+    List<Integer> getJugadorsEquip(Equip e) throws GestorBDClubException;
     
     /**
      * Recupera els jugadors de la BD
@@ -71,8 +71,9 @@ public interface IGestioBDClub {
      * @param e Equip
      * @param titular titularitat del jugador
      * @throws GestorBDClubException
+     * @return true si el ha modificat false si no 
      */
-    void actualizarTitularitat(Jugador j,Equip e,boolean titular) throws GestorBDClubException;
+    boolean actualizarTitularitat(Jugador j,Equip e,boolean titular) throws GestorBDClubException;
     
     /**
      * Insereix jugador en equip a la BD
@@ -81,24 +82,27 @@ public interface IGestioBDClub {
      * @param e Equip a inserir
      * @param titular titularitat del jugador
      * @throws GestorBDClubException
+     * @return true si el ha modificat false si no 
      */
-    void afegirJugadorAEquip(Jugador j,Equip e,boolean titular) throws GestorBDClubException;
+    boolean afegirJugadorAEquip(Jugador j,Equip e,boolean titular) throws GestorBDClubException;
     
     /**
      * Insereix jugador a la BD
      *
      * @param j Jugador a inserir
      * @throws GestorBDClubException
+     * @return retorna el id del jugador o -500 si hi ha un error
      */
-    void afegirJugador(Jugador j) throws GestorBDClubException;
+    int afegirJugador(Jugador j) throws GestorBDClubException;
     
     /**
      * Modifica el jugador a la BD
      *
      * @param j Jugador a modificar
      * @throws GestorBDClubException
+     * @return true si el ha modificat false si no 
      */
-    void modificarJugador(Jugador j) throws GestorBDClubException;
+    boolean modificarJugador(Jugador j) throws GestorBDClubException;
     
     /**
      * Elimina jugador a la BD
@@ -114,16 +118,18 @@ public interface IGestioBDClub {
      *
      * @param e Equip a inserir
      * @throws GestorBDClubException
+     * @return retorna el id del equip o -500 si hi ha un error
      */
-    void afegirEquip(Equip e) throws GestorBDClubException;
+    int afegirEquip(Equip e) throws GestorBDClubException;
     
     /**
      * Modificar Equip a la BD
      *
      * @param e Equip a modificar
      * @throws GestorBDClubException
+     * @return true si el ha modificat false si no 
      */
-    void ModificarEquip(Equip e) throws GestorBDClubException;
+    boolean ModificarEquip(Equip e) throws GestorBDClubException;
     
     /**
      * Eliminar Equip a la BD
@@ -133,6 +139,25 @@ public interface IGestioBDClub {
      * @throws GestorBDClubException
      */
     boolean eliminarEquip(Equip e) throws GestorBDClubException;
+    
+    
+    /**
+     * Retorna la categoria del id
+     *
+     * @param id Id de la categoria a buscar
+     * @return La categoria trobada o null
+     * @throws GestorBDClubException
+     */
+    Categoria getCategoria(int id) throws GestorBDClubException;
+    
+    /**
+     * Retorna la una llista de categories
+     *
+     * @return La llista de categories trobades
+     * @throws GestorBDClubException
+     */
+    List<Categoria> getAllCategories() throws GestorBDClubException;
+    
     
     /**
      * Tanca la connexió

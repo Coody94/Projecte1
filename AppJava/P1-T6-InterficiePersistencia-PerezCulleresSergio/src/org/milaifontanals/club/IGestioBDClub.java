@@ -129,7 +129,7 @@ public interface IGestioBDClub {
      * @throws GestorBDClubException
      * @return true si el ha modificat false si no 
      */
-    boolean ModificarEquip(Equip e) throws GestorBDClubException;
+    boolean modificarEquip(Equip e) throws GestorBDClubException;
     
     /**
      * Eliminar Equip a la BD

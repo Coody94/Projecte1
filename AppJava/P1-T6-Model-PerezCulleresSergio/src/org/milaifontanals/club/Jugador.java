@@ -22,6 +22,8 @@ public class Jugador {
     private String iban;
     private int any_fi_revisio_medica;
     private String adreca;
+    private String codi_postal;
+    private String poblacio;
     private InputStream foto;
     
     
@@ -32,16 +34,47 @@ public class Jugador {
     public Jugador() {
     }
 
-    public Jugador(int id, String nom, String cognom, String sexe, Date data_naix, String id_Legal, String iban, int any_fi_revisio_medica, String adreca) {
-        this.id = id;
-        this.nom = nom;
-        this.cognom = cognom;
-        this.sexe = sexe;
-        this.data_naix = data_naix;
-        this.id_Legal = id_Legal;
-        this.iban = iban;
-        this.any_fi_revisio_medica = any_fi_revisio_medica;
-        this.adreca = adreca;
+    public Jugador(int id, String nom, String cognom, String sexe, Date data_naix, String id_Legal, String iban, int any_fi_revisio_medica, String adreca,String codi_postal,String poblacio) {
+        setId(id);
+        setNom(nom);
+        setCognom(cognom);
+        setSexe(sexe);
+        setData_naix(data_naix);
+        setId_Legal(id_Legal);
+        setIban(iban);
+        setAny_fi_revisio_medica(any_fi_revisio_medica);
+        setAdreca(adreca);
+        setCodi_postal(codi_postal);
+        setPoblacio(poblacio);
+    }
+    
+    public Jugador( String nom, String cognom, String sexe, Date data_naix, String id_Legal, String iban, int any_fi_revisio_medica, String adreca,String codi_postal,String poblacio) {
+        setNom(nom);
+        setCognom(cognom);
+        setSexe(sexe);
+        setData_naix(data_naix);
+        setId_Legal(id_Legal);
+        setIban(iban);
+        setAny_fi_revisio_medica(any_fi_revisio_medica);
+        setAdreca(adreca);
+        setCodi_postal(codi_postal);
+        setPoblacio(poblacio);
+    }
+
+    public String getCodi_postal() {
+        return codi_postal;
+    }
+
+    public void setCodi_postal(String codi_postal) {
+        this.codi_postal = codi_postal;
+    }
+
+    public String getPoblacio() {
+        return poblacio;
+    }
+
+    public void setPoblacio(String poblacio) {
+        this.poblacio = poblacio;
     }
 
     

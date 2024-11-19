@@ -8,7 +8,7 @@ package org.milaifontanals.club;
  *
  * @author sepec
  */
-class GestorBDClubException extends Exception {
+public class GestorBDClubException extends Exception {
     public GestorBDClubException(String message) {
         super(message);
     }

@@ -32,6 +32,8 @@ CREATE TABLE jugador(
     iban VARCHAR(40) NOT NULL,
     any_fi_reviso_medica number(4,0) NOT NULL,
     adreca VARCHAR(50) NOT NULL,
+    codi_postal VARCHAR(10) NOT NULL,
+    poblacio VARCHAR(20) NOT NULL,
     foto BLOB,
     
     CONSTRAINT jugador_CK_sexe CHECK (sexe IN ('H','D')),

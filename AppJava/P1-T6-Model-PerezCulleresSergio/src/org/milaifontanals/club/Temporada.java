@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author sepec
  */
-class Temporada {
+public class Temporada {
     
     private int any_t;
     private List<Equip> equips;

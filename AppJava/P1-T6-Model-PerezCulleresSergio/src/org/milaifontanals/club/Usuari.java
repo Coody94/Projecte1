@@ -12,7 +12,7 @@ public class Usuari {
     
     private String login;
     private String nom;
-    private String password;
+    private String password;//sha1
 
     public Usuari() {
     }

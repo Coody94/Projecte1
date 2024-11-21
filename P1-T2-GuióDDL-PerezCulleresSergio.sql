@@ -115,35 +115,35 @@ BEGIN
 END;
 /
 
-
-CREATE OR REPLACE TRIGGER trg_validar_titular
-BEFORE INSERT OR UPDATE ON membre_equip
-FOR EACH ROW
-DECLARE
-    v_temporada equip.temporada%TYPE;
-    v_titular_existent NUMBER;
-BEGIN
-    IF :NEW.titular_convidat = 'T' THEN
-        SELECT temporada INTO v_temporada
-        FROM equip
-        WHERE id = :NEW.id_equip;
-
-        
-        SELECT COUNT(*)
-        INTO v_titular_existent
-        FROM membre_equip me
-        JOIN equip e ON me.id_equip = e.id
-        WHERE me.id_jugador = :NEW.id_jugador
-        AND me.titular_convidat = 'T'  
-        AND e.temporada = v_temporada;
-
-        
-        IF v_titular_existent > 0 THEN
-            RAISE_APPLICATION_ERROR(-20004, 'El jugador ya es titular per un altre equip en aquesta temporada');
-        END IF;
-    END IF;
-END;
-/
+--Es controlara per aplicacio
+--CREATE OR REPLACE TRIGGER trg_validar_titular
+--BEFORE INSERT OR UPDATE ON membre_equip
+--FOR EACH ROW
+--DECLARE
+--    v_temporada equip.temporada%TYPE;
+--    v_titular_existent NUMBER;
+--BEGIN
+--    IF :NEW.titular_convidat = 'T' THEN
+--        SELECT temporada INTO v_temporada
+--        FROM equip
+--        WHERE id = :NEW.id_equip;
+--
+--        
+--        SELECT COUNT(*)
+--        INTO v_titular_existent
+--        FROM membre_equip me
+--        JOIN equip e ON me.id_equip = e.id
+--        WHERE me.id_jugador = :NEW.id_jugador
+--        AND me.titular_convidat = 'T'  
+--        AND e.temporada = v_temporada;
+--
+--        
+--        IF v_titular_existent > 0 THEN
+--            RAISE_APPLICATION_ERROR(-20004, 'El jugador ya es titular per un altre equip en aquesta temporada');
+--        END IF;
+--    END IF;
+--END;
+--/
 
 
 CREATE OR REPLACE TRIGGER trg_validar_categorria_equip

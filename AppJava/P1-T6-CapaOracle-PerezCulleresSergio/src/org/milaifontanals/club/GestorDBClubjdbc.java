@@ -178,7 +178,11 @@ public class GestorDBClubjdbc implements IGestioBDClub{
                 String poblacio = rs.getString("poblacio");
                 
                 
+                
+                
                 Jugador j = new Jugador(id, nom, cognom, sexe, data_naix, id_legal, iban, fi_rm, adreca,codi_postal,poblacio);        
+                
+                
                 lljugadors.add(j);
             }
             rs.close();
@@ -281,7 +285,7 @@ public class GestorDBClubjdbc implements IGestioBDClub{
         int upd;
         if(actualizarTitularitat==null){
             try {
-                actualizarTitularitat = conn.prepareStatement("UPDATE equip SET titular_convidat = ? WHERE id_equip = ? and id_jugador = ?");
+                actualizarTitularitat = conn.prepareStatement("UPDATE membre_equip SET titular_convidat = ? WHERE id_equip = ? and id_jugador = ?");
             } catch (SQLException ex) {
                  throw new GestorBDClubException("Error en preparar sentència per acctualizar titularitat ", ex);
             }

@@ -33,13 +33,12 @@ public class TestCapaPersistenciaJDBC {
     /*
     getJugadorById;             ---Tested
     getAllJugadors;             ---Tested
-    modificarEquip; 
-    actualizarTitularitat;
+    modificarEquip;             ---Tested
+    actualizarTitularitat;      ---Tested
     afegirEquip;                ---Tested
     afegirJugador;              ---Tested
-    afegirJugadorAEquip;
-    eliminarEquip;
-    eliminarJugador;
+    afegirJugadorAEquip;        ---Tested
+    eliminarEquip;              ---Tested
     getEquips;                  ---Tested
     getJugadorsEquips;          ---Tested
     getTemporades;              ---Tested
@@ -76,6 +75,8 @@ public class TestCapaPersistenciaJDBC {
         //allCategories(gBD);
         
         //List<Temporada> lltemp = temporades(gBD);
+        
+        
         /*
         Categoria c = categoriaById(gBD,2);
         Equip e= new Equip();
@@ -83,7 +84,9 @@ public class TestCapaPersistenciaJDBC {
         e.setCategoria(c);
         e.setTemporada(new Temporada(2024));
         e.setTipus("H");
-        afegirEquip(gBD,e);
+        int id = afegirEquip(gBD,e);
+        e.setId(id);
+        eliminarEquip(gBD,e);
         */
         
         
@@ -100,15 +103,48 @@ public class TestCapaPersistenciaJDBC {
         calendar.set(2010, Calendar.NOVEMBER, 19, 0, 0, 0);
         Date date = calendar.getTime(); 
         Jugador jadd= new Jugador( "Test", "Test", "H",date , "11391888G", "ES39 0233 0402 9856 7350 3641", 0, "carret test", "08700", "igualada");
-        afegirJugador(gBD,jadd);
+        int idj = afegirJugador(gBD,jadd);
+        jadd.setId(idj);
+        
+        eliminarJugador(gBD, jadd);
         */
         
+        /*
         Equip eq = new Equip();
         eq.setId(1);
         List<Integer> lljugequip = getJugadorsEquips(gBD, eq);
         getJugadorsById(gBD, lljugequip.get(1));
+        */
+
+        
+        
+        /**/
+        Equip eqadd = new Equip();
+        eqadd.setId(5);
+        
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2011, Calendar.NOVEMBER, 19, 0, 0, 0);
+        Date date = calendar.getTime(); 
+        Jugador jadd2= new Jugador( "Test", "Test", "H",date , "11392388G", "ES39 0233 0402 9856 4450 3641", 0, "carret test", "08700", "igualada");
+        int idj = afegirJugador(gBD,jadd2);
+        jadd2.setId(idj);
+        
+        addJugadorEquip(gBD,eqadd,jadd2,false);
+        actualizarTitularitat(gBD,eqadd,jadd2,true);
+        
+        
+        /*
+        Equip eqmod = new Equip();
+        eqmod.setId(5);
+        eqmod.setNom("Senior 44");
+        modificarEquip(gBD, eqmod);
+        */
+        
         
         try {
+            
+            //gBD.desferCanvis();
+            //gBD.confirmarCanvis();
             gBD.tancarCapa();
              System.out.println("capa Tancada");
         } catch (GestorBDClubException ex) {
@@ -176,17 +212,18 @@ public class TestCapaPersistenciaJDBC {
         return lltemp;
     }
     
-    private static void afegirEquip(GestorDBClubjdbc gBD,Equip e){
+    private static int afegirEquip(GestorDBClubjdbc gBD,Equip e){
         System.out.println("Afegir Equip");
-        
+        int i=0;
         try {
-            int i = gBD.afegirEquip(e);
+             i = gBD.afegirEquip(e);
             String tc  = i>0?"Afegit":"Error";
             System.out.println(tc+" id:"+i);
         } catch (GestorBDClubException ex) {
             System.out.println("Problema en afegir equip:");
             System.out.println(ex.getMessage());
         }
+        return i;
     }
 
     private static List<Jugador> getAllJugadors(GestorDBClubjdbc gBD) {
@@ -223,18 +260,19 @@ public class TestCapaPersistenciaJDBC {
        return j;
     }
     
-    private static void afegirJugador(GestorDBClubjdbc gBD,Jugador j){
+    private static int afegirJugador(GestorDBClubjdbc gBD,Jugador j){
         System.out.println("Afegir Jugador");
-        
+        int id=0;
         try {
-            int i = gBD.afegirJugador(j);
-            j.setId(i);
-            String tc  = i>0?"Afegit":"Error";
+            id = gBD.afegirJugador(j);
+            j.setId(id);
+            String tc  = id>0?"Afegit":"Error";
             System.out.println(tc+" id:"+j.getId());
         } catch (GestorBDClubException ex) {
             System.out.println("Problema en afegir jugador:");
             System.out.println(ex.getMessage());
         }
+        return id;
     }
     
     private static void modificarJugador(GestorDBClubjdbc gBD,Jugador j){
@@ -270,6 +308,77 @@ public class TestCapaPersistenciaJDBC {
         
         return llIDSjug;
     }
+
+    private static void eliminarEquip(GestorDBClubjdbc gBD,Equip e) {
+        System.out.println("Eliminar Equip");
+        try {
+            boolean i = gBD.eliminarEquip(e);
+            String tc  = i?"Eliminat":"Error";
+            System.out.println(tc);
+        } catch (GestorBDClubException ex) {
+            System.out.println("Problema en eliminar equip:");
+            System.out.println(ex.getMessage());
+        }
+        
+    
+    }
+    
+    private static void eliminarJugador(GestorDBClubjdbc gBD,Jugador j) {
+        System.out.println("Eliminar Jugador");
+        try {
+            boolean i = gBD.eliminarJugador(j);
+            String tc  = i?"Eliminat":"Error";
+            System.out.println(tc);
+        } catch (GestorBDClubException ex) {
+            System.out.println("Problema en eliminar equip:");
+            System.out.println(ex.getMessage());
+        }
+        
+    
+    }
+
+    private static void addJugadorEquip(GestorDBClubjdbc gBD, Equip e, Jugador j, boolean titular) { 
+        System.out.println("Add jugador a equip");
+        try {
+            boolean i = gBD.afegirJugadorAEquip(j, e, titular);
+            String tc  = i?"Afegit a equip":"Error";
+            System.out.println(tc);
+        } catch (GestorBDClubException ex) {
+            System.out.println("Problema en afegir jugador a equip:");
+            System.out.println(ex.getMessage());
+        }
+    
+    }
+
+    private static void modificarEquip(GestorDBClubjdbc gBD, Equip eqmod) {
+        System.out.println("Modificar Equip");
+        try {
+            boolean i = gBD.modificarEquip(eqmod);
+            String tc  = i?"Equip modificat":"Error";
+            System.out.println(tc);
+        } catch (GestorBDClubException ex) {
+            System.out.println("Problema en modificar equip:");
+            System.out.println(ex.getMessage());
+        }
+        
+    
+    
+    }
+
+    private static void actualizarTitularitat(GestorDBClubjdbc gBD, Equip eqadd, Jugador jaddeq, boolean b) {
+        System.out.println("actualizar titularitat");
+        try {
+            
+            boolean i = gBD.actualizarTitularitat(jaddeq, eqadd, b);
+            String tc  = i?"Titularitat actualizada":"Error";
+            System.out.println(tc);
+        } catch (GestorBDClubException ex) {
+            System.out.println("Problema en actualizar titularitat:");
+            System.out.println(ex.getMessage());
+        }
+        
+    }
+    
     
     
     

@@ -31,19 +31,19 @@ public class JugadorsFrame extends JFrame{
     
     public JugadorsFrame(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
+
         
-        // Configuración básica del JFrame
         setTitle("Gestió Jugadors");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
         setLayout(new BorderLayout());
 
-        // Panel superior con el botón de regreso
+        // Panell superior
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton backButton = new JButton("← Equips");
         topPanel.add(backButton);
 
-        // Panel central con JTable
+        // Panell central
         String[] columnNames = {"Nom", "Cognom", "Data Naixement", "Sexe"};
         Object[][] data = {
                 {"Roman", "Huerta", "10-01-2010", "H"},
@@ -57,7 +57,7 @@ public class JugadorsFrame extends JFrame{
         JTable table = new JTable(tableModel);
         JScrollPane tableScrollPane = new JScrollPane(table);
 
-        // Panel derecho con filtros
+        // Panell de la dreta
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         rightPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -97,7 +97,7 @@ public class JugadorsFrame extends JFrame{
         rightPanel.add(Box.createVerticalStrut(10)); // Espaciado
         rightPanel.add(rightButtonPanel);
 
-        // Panel inferior con botones
+        // Panell inferior 
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton nuevoButton = new JButton("Nou");
         JButton editarButton = new JButton("Editar");
@@ -107,7 +107,7 @@ public class JugadorsFrame extends JFrame{
         bottomPanel.add(editarButton);
         bottomPanel.add(exportarButton);
 
-        // Agregar paneles al JFrame principal
+        // Agregar panells al jframe
         add(topPanel, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
         add(rightPanel, BorderLayout.EAST);

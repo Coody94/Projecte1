@@ -5,6 +5,8 @@
 package org.milaifontanals.club;
 
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 
 /**
@@ -16,12 +18,39 @@ public class Main {
     /**
      * @param args the command line arguments
      */
+    private static GestorDBClubjdbc gBD;
+    
     public static void main(String[] args) {
-         SwingUtilities.invokeLater(() -> new LoginFrame());
+        String nomClassePersistencia="org.milaifontanals.club.GestorDBClubjdbc";
+        
+        try {
+            gBD = (GestorDBClubjdbc) Class.forName(nomClassePersistencia).newInstance();
+            //gBD = new GestorDBClubjdbc();
+            SwingUtilities.invokeLater(() -> new LoginFrame(gBD));
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        
+         
     }
     
 
-    
+    private String infoError(Throwable ex) {
+        String aux;
+        String info = ex.getMessage();
+        if (info != null) {
+            info += "\n";
+        }
+        while (ex.getCause() != null) {
+            aux = ex.getCause().getMessage();
+            if (aux != null) {
+                aux += "\n";
+            }
+            info = info + aux;
+            ex = ex.getCause();
+        }
+        return info;
+    }
     
     
 }

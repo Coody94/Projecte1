@@ -6,6 +6,8 @@ package org.milaifontanals.club;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -20,7 +22,7 @@ import javax.swing.JTextField;
  * @author sepec
  */
 public class LoginFrame extends JFrame{
-        public LoginFrame() {
+        public LoginFrame(GestorDBClubjdbc gBD) {
         
         setTitle("Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -43,11 +45,38 @@ public class LoginFrame extends JFrame{
         JButton loginButton = new JButton("Acceder");
         loginButton.addActionListener(e -> {
             String username = userField.getText();
-            char[] password = passField.getPassword();
+            char[] password2 = passField.getPassword();
+            String password = new String(password2);
             // Validacio 
-            if (!username.isEmpty() && password.length > 0) {
-                new MainFrame(); // Anar al mainFrame
-                dispose(); // Tencar finestra login
+            
+            Usuari u=null;
+            
+            if (!username.isEmpty() && password2.length > 0) {
+                try{
+                    u = gBD.getUsuari(username);
+                    
+                }catch(Exception ex){
+                    
+                }
+                if(u!=null){
+                    String hash=null;
+                    try{
+                          hash = encriptarSHA1(password);
+                    }catch(Exception ex){
+
+                    }   
+                    if(hash.equals(u.getPassword())){
+                        new MainFrame(); // Anar al mainFrame
+                        dispose(); // Tencar finestra login
+                    }else{
+                        JOptionPane.showMessageDialog(this, "Contrasenya incorrecte");
+                    }
+
+                    
+                }else{
+                    JOptionPane.showMessageDialog(this, "Usuari incorrecte");
+                }
+     
             } else {
                 JOptionPane.showMessageDialog(this, "Falta usuari o contrasseña");
             }
@@ -58,6 +87,26 @@ public class LoginFrame extends JFrame{
 
         setLocationRelativeTo(null);
         setVisible(true);
+    }
+        
+        
+        
+        
+     public static String encriptarSHA1(String texto) throws NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-1");
+        
+        byte[] hashBytes = digest.digest(texto.getBytes());
+        
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : hashBytes) {
+            String hex = Integer.toHexString(0xff & b);
+            if (hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+        
+        return hexString.toString();
     }
     
 }

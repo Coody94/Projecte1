@@ -6,6 +6,10 @@ package org.milaifontanals.club;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -14,12 +18,14 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import org.milaifontanals.TableModel.JugadorsTableModel;
 
 /**
  *
@@ -27,9 +33,10 @@ import javax.swing.table.DefaultTableModel;
  */
 public class JugadorsFrame extends JFrame{
     private final MainFrame mainFrame;
+    private List<Jugador> lljug;
+    private List<Categoria> llcat;
     
-    
-    public JugadorsFrame(MainFrame mainFrame) {
+    public JugadorsFrame(MainFrame mainFrame,GestorDBClubjdbc gBD) {
         this.mainFrame = mainFrame;
 
         
@@ -37,6 +44,25 @@ public class JugadorsFrame extends JFrame{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
         setLayout(new BorderLayout());
+        
+        
+        try{
+            llcat = gBD.getAllCategories();
+            Categoria c = new Categoria();
+            c.setId(-500);
+            c.setNom("Totes");
+            
+            llcat.add(0, c);
+           
+           
+        } catch (GestorBDClubException ex) {
+            llcat = new ArrayList<>();
+            Categoria c = new Categoria();
+            c.setId(-500);
+            c.setNom("Totes");
+            llcat.add(c);
+        }
+        
 
         // Panell superior
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -44,17 +70,27 @@ public class JugadorsFrame extends JFrame{
         topPanel.add(backButton);
 
         // Panell central
-        String[] columnNames = {"Nom", "Cognom", "Data Naixement", "Sexe"};
-        Object[][] data = {
-                {"Roman", "Huerta", "10-01-2010", "H"},
-                {"Aitana", "Rial", "10-01-2010", "D"},
-                {"Sandra", "Pacheco", "10-01-2010", "D"},
-                {"Alfredo", "Arnaiz", "10-01-2010", "H"},
-                {"Adolfo", "Gonzales", "10-01-2010", "H"},
-                {"Gloria", "Holgado", "10-01-2010", "D"}
-        };
-        DefaultTableModel tableModel = new DefaultTableModel(data, columnNames);
-        JTable table = new JTable(tableModel);
+//        String[] columnNames = {"Nom", "Cognom", "Data Naixement", "Sexe"};
+//        Object[][] data = {
+//                {"Roman", "Huerta", "10-01-2010", "H"},
+//                {"Aitana", "Rial", "10-01-2010", "D"},
+//                {"Sandra", "Pacheco", "10-01-2010", "D"},
+//                {"Alfredo", "Arnaiz", "10-01-2010", "H"},
+//                {"Adolfo", "Gonzales", "10-01-2010", "H"},
+//                {"Gloria", "Holgado", "10-01-2010", "D"}
+//        };
+//        DefaultTableModel tableModel = new DefaultTableModel(data, columnNames);
+
+
+        
+        try{
+             lljug = gBD.getAllJugadors();
+        }catch(Exception ex){
+            
+        }
+        JugadorsTableModel juTaModel = new JugadorsTableModel(lljug);
+        
+        JTable table = new JTable(juTaModel);
         JScrollPane tableScrollPane = new JScrollPane(table);
 
         // Panell de la dreta
@@ -85,7 +121,7 @@ public class JugadorsFrame extends JFrame{
         rightPanel.add(genderPanel);
 
         rightPanel.add(new JLabel("Categoria:"));
-        JComboBox<String> categoriaComboBox = new JComboBox<>(new String[]{"Cadet", "Juvenil", "Senior"});
+        JComboBox<Categoria> categoriaComboBox = new JComboBox<>(llcat.toArray(new Categoria[0]));
         rightPanel.add(categoriaComboBox);
 
         JPanel rightButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -102,6 +138,22 @@ public class JugadorsFrame extends JFrame{
         JButton nuevoButton = new JButton("Nou");
         JButton editarButton = new JButton("Editar");
         JButton exportarButton = new JButton("Exportar Jugadors");
+        
+        editarButton.addActionListener(e ->{
+            //test seleccio
+            int i =table.getSelectedRow();
+            if(i!=-1){
+                Jugador j= lljug.get(i);
+                JOptionPane.showMessageDialog(this, "Jugador: "+j.getNom());
+            }else{
+                JOptionPane.showMessageDialog(this, "Cap seleccionat");
+            }
+            
+            
+            
+        
+        });
+        
 
         bottomPanel.add(nuevoButton);
         bottomPanel.add(editarButton);

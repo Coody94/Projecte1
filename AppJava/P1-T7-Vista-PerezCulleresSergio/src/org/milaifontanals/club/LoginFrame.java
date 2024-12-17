@@ -36,6 +36,10 @@ public class LoginFrame extends JFrame{
         JTextField userField = new JTextField();
         JPasswordField passField = new JPasswordField();
 
+        //TODO remove
+        userField.setText("usuari");
+        passField.setText("usuari");
+        //---------
         loginPanel.add(userLabel);
         loginPanel.add(userField);
         loginPanel.add(passLabel);
@@ -66,7 +70,7 @@ public class LoginFrame extends JFrame{
 
                     }   
                     if(hash.equals(u.getPassword())){
-                        new MainFrame(); // Anar al mainFrame
+                        new MainFrame(gBD); // Anar al mainFrame
                         dispose(); // Tencar finestra login
                     }else{
                         JOptionPane.showMessageDialog(this, "Contrasenya incorrecte");

@@ -26,6 +26,11 @@ public class Categoria {
         setEdat_min(edat_min);
         setEdat_max(edat_max);
     }
+    public Categoria( String nom, int edat_min, int edat_max) {
+        setNom(nom);
+        setEdat_min(edat_min);
+        setEdat_max(edat_max);
+    }
 
     
     
@@ -69,6 +74,11 @@ public class Categoria {
 
     public void setEdat_max(int edat_max) {
         this.edat_max = edat_max;
+    }
+
+    @Override
+    public String toString() {
+        return nom ;
     }
     
             

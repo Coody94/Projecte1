@@ -35,7 +35,14 @@ public class Equip {
         setConvidats(null);
         setTitulars(null);
     }
-    
+    public Equip(String nom, String tipus, Temporada temporada, Categoria categoria) {
+        setNom(nom);
+        setTipus(tipus);
+        setTemporada(temporada);
+        setCategoria(categoria);
+        setConvidats(null);
+        setTitulars(null);
+    }
     
     
     

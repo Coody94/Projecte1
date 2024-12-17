@@ -5,4 +5,5 @@
     <entry key="url">jdbc:oracle:thin:@10.2.119.138:1521/XEPDB1</entry>
     <entry key="user">CLUB</entry>
     <entry key="password">club</entry>
+    <entry key="clase">org.milaifontanals.club.GestorDBClubjdbc</entry>
 </properties>

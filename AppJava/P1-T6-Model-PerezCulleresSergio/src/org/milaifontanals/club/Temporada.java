@@ -55,6 +55,11 @@ public class Temporada {
        
     }
 
+    @Override
+    public String toString() {
+        return any_t+"";
+    }
+
   
     
     

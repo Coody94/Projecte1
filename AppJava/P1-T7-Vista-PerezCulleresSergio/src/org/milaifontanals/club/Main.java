@@ -5,6 +5,8 @@
 package org.milaifontanals.club;
 
 
+import java.io.FileInputStream;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
@@ -21,7 +23,20 @@ public class Main {
     private static GestorDBClubjdbc gBD;
     
     public static void main(String[] args) {
-        String nomClassePersistencia="org.milaifontanals.club.GestorDBClubjdbc";
+        //String nomClassePersistencia="org.milaifontanals.club.GestorDBClubjdbc";
+        String nomClassePersistencia="";
+        
+        try{
+            
+        
+        String nomFitxer = "clubJDBC.xml";
+        Properties props = new Properties();
+        props.loadFromXML(new FileInputStream(nomFitxer));
+        
+        nomClassePersistencia = props.getProperty("clase");
+        }catch(Exception ex){
+            System.out.println(ex);
+        }
         
         try {
             gBD = (GestorDBClubjdbc) Class.forName(nomClassePersistencia).newInstance();
@@ -29,6 +44,7 @@ public class Main {
             SwingUtilities.invokeLater(() -> new LoginFrame(gBD));
         } catch (Exception ex) {
             System.out.println(ex);
+            
         }
         
          

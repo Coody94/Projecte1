@@ -34,15 +34,20 @@ public class GestorDBClubjdbc implements IGestioBDClub{
     
     private PreparedStatement getJugadorById;
     private PreparedStatement getAllJugadors;
+    private PreparedStatement getAllJugadorsFAny;
     private PreparedStatement modificarEquip; 
     private PreparedStatement actualizarTitularitat;
+    private PreparedStatement afegirTemporada;
     private PreparedStatement afegirEquip;
     private PreparedStatement afegirJugador;
     private PreparedStatement afegirJugadorAEquip;
     private PreparedStatement eliminarEquip;
     private PreparedStatement eliminarJugador;
+    private PreparedStatement eliminarJugadorEquip;
     private PreparedStatement getEquip;
     private PreparedStatement getJugadorsEquips;
+    private PreparedStatement getJugadorsEquipsTitulars;
+    private PreparedStatement getJugadorsEquipsConvidats;
     private PreparedStatement getTemporades;
     private PreparedStatement getUsuari;
     private PreparedStatement modificarJugador;
@@ -100,6 +105,7 @@ public class GestorDBClubjdbc implements IGestioBDClub{
                 String poblacio = rs.getString("poblacio");
                 
                 Jugador j = new Jugador(id, nom, cognom, sexe, data_naix, id_legal, iban, fi_rm, adreca,codi_postal,poblacio);        
+                rs.close();
                 return j;
             }
             rs.close();
@@ -114,6 +120,38 @@ public class GestorDBClubjdbc implements IGestioBDClub{
         
         
     }
+    
+    
+    @Override
+    public boolean afegirTemporad(Temporada t) throws GestorBDClubException {
+        int fi=0;
+        int key = -500;
+        if(afegirTemporada==null){
+            try {
+
+                afegirTemporada=conn.prepareStatement("INSERT INTO temporada (any_t) VALUES (?)");
+
+                
+            } catch (SQLException ex) {
+                throw new GestorBDClubException("Error en preparar sentència per afegir temporada ", ex);
+            }
+        }
+        
+        try {
+            
+            afegirTemporada.setInt(1, t.getAny_t());
+            
+            fi = afegirTemporada.executeUpdate();
+
+            
+        } catch (SQLException ex) {
+            throw new GestorBDClubException("Error en executar sentència per afegir equip ", ex);
+        }
+        
+        return fi>0;
+    }
+    
+    
 
     @Override
     public List<Integer> getJugadorsEquip(Equip e) throws GestorBDClubException {
@@ -140,7 +178,7 @@ public class GestorDBClubjdbc implements IGestioBDClub{
             }
             rs.close();
         } catch (SQLException ex) {
-            throw new GestorBDClubException("Error en la recuperacio de equips", ex);
+            throw new GestorBDClubException("Error en la recuperacio de jugadors", ex);
         }
         
         
@@ -149,6 +187,78 @@ public class GestorDBClubjdbc implements IGestioBDClub{
         
         
     }
+    
+    @Override
+    public List<Jugador> getJugadorsEquipTitulars(Equip e) throws GestorBDClubException {
+        List<Jugador> lljug =  new ArrayList<>();
+        if(getJugadorsEquipsTitulars==null){
+            try {
+                getJugadorsEquipsTitulars = conn.prepareStatement("select id_jugador from membre_equip where id_equip = ? and titular_convidat = 'T'");
+            } catch (SQLException ex) {
+                throw new GestorBDClubException("Error en preparar sentència per getJugadorsEquipTitulars", ex);
+            }
+        }
+        
+        try {
+            getJugadorsEquipsTitulars.setInt(1, e.getId());
+            ResultSet rs = getJugadorsEquipsTitulars.executeQuery();
+            while(rs.next()){
+                
+                int id_jugador = rs.getInt("id_jugador");
+                Jugador j = this.getJugadorsById(id_jugador);
+                
+                
+                       
+                lljug.add(j);
+            }
+            rs.close();
+        } catch (SQLException ex) {
+            throw new GestorBDClubException("Error en la recuperacio de jugadors titulars", ex);
+        }
+        
+        
+        
+        return lljug;
+        
+        
+    }
+    
+    
+    @Override
+    public List<Jugador> getJugadorsEquipConvidats(Equip e) throws GestorBDClubException {
+        List<Jugador> lljug =  new ArrayList<>();
+        if(getJugadorsEquipsConvidats==null){
+            try {
+                getJugadorsEquipsConvidats = conn.prepareStatement("select id_jugador from membre_equip where id_equip = ? and titular_convidat = 'C'");
+            } catch (SQLException ex) {
+                throw new GestorBDClubException("Error en preparar sentència per getJugadorsEquipConvidats", ex);
+            }
+        }
+        
+        try {
+            getJugadorsEquipsConvidats.setInt(1, e.getId());
+            ResultSet rs = getJugadorsEquipsConvidats.executeQuery();
+            while(rs.next()){
+                
+                int id_jugador = rs.getInt("id_jugador");
+                Jugador j = this.getJugadorsById(id_jugador);
+                
+                
+                       
+                lljug.add(j);
+            }
+            rs.close();
+        } catch (SQLException ex) {
+            throw new GestorBDClubException("Error en la recuperacio de jugadors convidats", ex);
+        }
+        
+        
+        
+        return lljug;
+        
+        
+    }
+    
 
     @Override
     public List<Jugador> getAllJugadors() throws GestorBDClubException {
@@ -163,6 +273,55 @@ public class GestorDBClubjdbc implements IGestioBDClub{
         
          try {
             ResultSet rs = getAllJugadors.executeQuery();
+            while(rs.next()){
+                int id = rs.getInt("id");
+                String nom = rs.getString("nom");
+                String cognom = rs.getString("cognom");
+                String sexe = rs.getString("sexe");
+                java.sql.Date sql_data_naix = rs.getDate("data_naix");
+                Date data_naix = new Date(sql_data_naix.getTime());
+                String id_legal = rs.getString("id_legal");
+                String iban = rs.getString("iban");
+                int fi_rm = rs.getInt("any_fi_reviso_medica");
+                String adreca = rs.getString("adreca");
+                String codi_postal = rs.getString("codi_postal");
+                String poblacio = rs.getString("poblacio");
+                
+                
+                
+                
+                Jugador j = new Jugador(id, nom, cognom, sexe, data_naix, id_legal, iban, fi_rm, adreca,codi_postal,poblacio);        
+                
+                
+                lljugadors.add(j);
+            }
+            rs.close();
+        } catch (SQLException ex) {
+            throw new GestorBDClubException("Error en la recuperacio de jugadors", ex);
+        }
+        
+        
+        
+        return lljugadors;
+    }
+    
+    @Override
+    public List<Jugador> getAllJugadorsFiltrat(int any,String tipus_equip) throws GestorBDClubException {
+        List<Jugador> lljugadors = new ArrayList<>();
+        if(getAllJugadorsFAny==null){
+            try {
+                getAllJugadorsFAny = conn.prepareStatement("select id,nom,cognom,sexe,data_naix,id_legal,iban,any_fi_reviso_medica,adreca,foto,codi_postal,poblacio from jugador WHERE data_naix >= ?and ('M'=? or sexe=?)");
+            } catch (SQLException ex) {
+                throw new GestorBDClubException("Error en preparar sentència per getAllJugadors", ex);
+            } 
+        }
+        
+         try {
+            java.sql.Date data = java.sql.Date.valueOf(any+"-01-01");
+            getAllJugadorsFAny.setDate(1, data);
+            getAllJugadorsFAny.setString(2, tipus_equip);
+            getAllJugadorsFAny.setString(3, tipus_equip);
+            ResultSet rs = getAllJugadorsFAny.executeQuery();
             while(rs.next()){
                 int id = rs.getInt("id");
                 String nom = rs.getString("nom");
@@ -270,9 +429,10 @@ public class GestorDBClubjdbc implements IGestioBDClub{
             ResultSet rs = getUsuari.executeQuery();
             if(rs.next()){
                 String passwd = rs.getString("password");
+                rs.close();
                 return new Usuari(login, passwd);
             }
-            
+            rs.close();
         } catch (SQLException ex) {
             throw new GestorBDClubException("Error en la recuperacio del usuari", ex);
         }
@@ -426,6 +586,33 @@ public class GestorDBClubjdbc implements IGestioBDClub{
                 del = eliminarJugador.executeUpdate();
             } catch (SQLException ex) {
                  throw new GestorBDClubException("Error en executar sentència per eliminar jugador ", ex);
+            }
+            
+            return del==1;
+        
+        
+        
+    }
+    
+    
+    @Override
+    public boolean eliminarJugadorEquip(Jugador j,Equip e) throws GestorBDClubException {
+        int del =0;
+        if(eliminarJugadorEquip==null){
+            try {
+                eliminarJugadorEquip = conn.prepareStatement("DELETE FROM membre_equip WHERE id_equip = ? and id_jugador = ?");
+            } catch (SQLException ex) {
+                throw new GestorBDClubException("Error en preparar sentència per eliminar jugador del equip", ex);
+            }
+        }
+        
+
+        try {
+                eliminarJugadorEquip.setInt(1, e.getId());
+                eliminarJugadorEquip.setInt(2, j.getId());
+                del = eliminarJugadorEquip.executeUpdate();
+            } catch (SQLException ex) {
+                 throw new GestorBDClubException("Error en executar sentència per eliminar jugador del equip ", ex);
             }
             
             return del==1;
@@ -592,10 +779,10 @@ public class GestorDBClubjdbc implements IGestioBDClub{
                 String nom = rs.getString("nom");
                 int edat_min = rs.getInt("edat_min");
                 int edat_max = rs.getInt("edat_max");
-                
+                rs.close();
                 return new Categoria(id, nom, edat_min, edat_max);
             }
-            
+            rs.close();
         } catch (SQLException ex) {
             throw new GestorBDClubException("Error en la recuperacio del categoria", ex);
         }
@@ -627,7 +814,7 @@ public class GestorDBClubjdbc implements IGestioBDClub{
                 Categoria c = new Categoria(id, nom, edat_min, edat_max);
                 llcat.add(c);
             }
-            
+            rs.close();
         } catch (SQLException ex) {
             throw new GestorBDClubException("Error en la recuperacio de totes les categoria", ex);
         }

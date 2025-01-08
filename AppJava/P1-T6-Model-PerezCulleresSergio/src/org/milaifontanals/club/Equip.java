@@ -18,12 +18,11 @@ public class Equip {
     private String tipus;
     private Temporada temporada;
     private Categoria categoria;
-    private List<Jugador> convidats;
-    private List<Jugador> titulars;
+    private List<JugadorAuxEquip> jugadors;
 
     public Equip() {
-        setConvidats(null);
-        setTitulars(null);
+        setJugadors(null);
+
     }
 
     public Equip(int id, String nom, String tipus, Temporada temporada, Categoria categoria) {
@@ -32,60 +31,42 @@ public class Equip {
         setTipus(tipus);
         setTemporada(temporada);
         setCategoria(categoria);
-        setConvidats(null);
-        setTitulars(null);
+        setJugadors(null);
     }
     public Equip(String nom, String tipus, Temporada temporada, Categoria categoria) {
         setNom(nom);
         setTipus(tipus);
         setTemporada(temporada);
         setCategoria(categoria);
-        setConvidats(null);
-        setTitulars(null);
+        setJugadors(null);
     }
     
     
     
-    public void promoveToTitular(Jugador j) throws ClubException{
+    public void promoveToTitular(JugadorAuxEquip j) throws ClubException{
         
-        if(titulars.contains(j)){
-            throw new ClubException("El jugador ya es titular");
+        if(jugadors.contains(j)){
+            j.setTitular(true);
+        }
 
-        }
-        
-        if(convidats.contains(j)){
-            convidats.remove(j);
-            titulars.add(j);
-        }else{
-            throw new ClubException("El jugador no esta en el equip");
-        }
     }
     
-    public void removeTitular(Jugador j) throws ClubException{
-        if(convidats.contains(j)){
-            throw new ClubException("El jugador ya es convidat");
+    public void removeTitular(JugadorAuxEquip j) throws ClubException{
+        if(jugadors.contains(j)){
+            j.setTitular(false);
+        }
 
-        }
-        
-        if(titulars.contains(j)){
-            titulars.remove(j);
-            convidats.add(j);
-        }else{
-            throw new ClubException("El jugador no esta en el equip");
-        }
     }
     
     public void addJugadors(Jugador j,boolean titular) throws ClubException{
-        
-        if(titulars.contains(j)|| convidats.contains(j)){
+        JugadorAuxEquip jug= new JugadorAuxEquip(j, titular);
+        if(jugadors.contains(jug)){
             throw new ClubException("El jugador ya esta en el equip");
+        }else{
+            jugadors.add(jug);
         }
         
-        if(titular){
-             titulars.add(j);
-        }else{
-            convidats.add(j);
-        }
+        
         
         
     }
@@ -136,31 +117,20 @@ public class Equip {
         this.tipus = tipus;
     }
 
-    public List<Jugador> getTitulars() {
-        return titulars;
+ 
+
+    public List<JugadorAuxEquip> getJugadors() {
+        return jugadors;
     }
 
-    public void setTitulars(List<Jugador> titulars) {
-        if(titulars!=null){
-            this.titulars = titulars;
+    public void setJugadors(List<JugadorAuxEquip> jugadors) {
+        if(jugadors!=null){
+            this.jugadors = jugadors;
         }else{
-            this.titulars = new ArrayList<>();
+            this.jugadors = new ArrayList<>();
         }
     }
 
-    public List<Jugador> getConvidats() {
-        return convidats;
-    }
-
-    public void setConvidats(List<Jugador> convidats) {
-        if(convidats!=null){
-            this.convidats = convidats;
-        }else{
-            this.convidats = new ArrayList<>();
-        }
-        
-    }
-    
     
     
     

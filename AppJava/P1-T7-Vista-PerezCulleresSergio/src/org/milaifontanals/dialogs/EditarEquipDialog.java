@@ -72,12 +72,11 @@ public class EditarEquipDialog extends JDialog{
                     JOptionPane.showMessageDialog(this, "ne es pot eliminar un equip amb jugadors");
                 }else{
                     del=gBD.eliminarEquip(editedEquip);
-                    //TODO uncomment
-                    //gBD.confirmarCanvis();
+                    gBD.confirmarCanvis();
                 }
                 
             }catch(Exception ex){
-                
+                JOptionPane.showMessageDialog(this, "Error en carregar les dades");
             }
             if(!del && !(num>0)){
                 JOptionPane.showMessageDialog(this, "Error en eliminar");
@@ -99,10 +98,13 @@ public class EditarEquipDialog extends JDialog{
             boolean mod = false;
             try{
                 mod = gBD.modificarEquip(editedEquip);
+                gBD.confirmarCanvis();
+                
             }catch(Exception ex){
                 
             }
             if(mod){
+                
                 dispose();
             }else{
                 JOptionPane.showMessageDialog(this, "Error en modificar");

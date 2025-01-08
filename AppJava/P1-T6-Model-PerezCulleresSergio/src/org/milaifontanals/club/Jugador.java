@@ -181,6 +181,11 @@ public class Jugador {
         final Jugador other = (Jugador) obj;
         return this.id == other.id;
     }
+
+    @Override
+    public String toString() {
+        return nom + " " + cognom ;
+    }
     
     
     

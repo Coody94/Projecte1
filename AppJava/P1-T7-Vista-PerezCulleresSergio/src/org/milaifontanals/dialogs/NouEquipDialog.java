@@ -49,7 +49,7 @@ public class NouEquipDialog extends JDialog {
            
            
         } catch (GestorBDClubException ex) {
-            return;
+            JOptionPane.showMessageDialog(this, "Error en carregar les dades");
         }
         
         
@@ -120,8 +120,7 @@ public class NouEquipDialog extends JDialog {
 
                 try{
                     createdEquip.setId( gBD.afegirEquip(createdEquip));
-                    //TODO uncomment
-                    //gBD.confirmarCanvis();
+                    gBD.confirmarCanvis();
                 }catch(Exception ex){
                 }
 

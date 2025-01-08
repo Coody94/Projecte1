@@ -30,6 +30,36 @@ public interface IGestioBDClub {
      */
     List<Integer> getJugadorsEquip(Equip e) throws GestorBDClubException;
     
+    
+    /**
+     * Recupera el jugador de la BD
+     *
+     * @param t temporada a inserir
+     * @return true si el ha inserit false si no 
+     * @throws GestorBDClubException
+     */
+    boolean afegirTemporad(Temporada t) throws GestorBDClubException;
+    
+    
+    
+    /**
+     * Recupera els jugadors de un equip de la BD
+     *
+     * @param e equip dels jugadors a recuperar
+     * @return Llista dels jugadors
+     * @throws GestorBDClubException
+     */
+    List<Jugador> getJugadorsEquipTitulars(Equip e) throws GestorBDClubException;
+    
+    /**
+     * Recupera els jugadors de un equip de la BD
+     *
+     * @param e equip dels jugadors a recuperar
+     * @return Llista dels jugadors
+     * @throws GestorBDClubException
+     */
+    List<Jugador> getJugadorsEquipConvidats(Equip e) throws GestorBDClubException;
+    
     /**
      * Recupera els jugadors de la BD
      *
@@ -37,6 +67,16 @@ public interface IGestioBDClub {
      * @throws GestorBDClubException
      */
     List<Jugador> getAllJugadors() throws GestorBDClubException;
+    
+    /**
+     * Recupera els jugadors de la BD a partir de un any determinat
+     *
+     * @param any es el any a parir del que recupera els jugadors
+     * @param tipus_equip es si el equip es masculi, femeni o mixte
+     * @return Llista de equips recuperats
+     * @throws GestorBDClubException
+     */
+    List<Jugador> getAllJugadorsFiltrat(int any,String tipus_equip) throws GestorBDClubException;
     
     /**
      * Recupera els equips de una temporada de la BD
@@ -112,6 +152,16 @@ public interface IGestioBDClub {
      * @throws GestorBDClubException
      */
     boolean eliminarJugador(Jugador j) throws GestorBDClubException;
+    
+     /**
+     * Elimina jugador de un equip a la BD
+     *
+     * @param j Jugador a eliminar
+     * @param e el equip del que selimina
+     * @return true si el ha eliminat false si no 
+     * @throws GestorBDClubException
+     */
+    boolean eliminarJugadorEquip(Jugador j,Equip e) throws GestorBDClubException;
     
     /**
      * Insereix Equip a la BD
